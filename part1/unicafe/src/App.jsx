@@ -4,21 +4,21 @@ const Header = ({ text }) => <h1>{text}</h1>
 
 const Button = ({ onClick, text }) => <button onClick={onClick}>{text}</button>
 
-const Statistic = ({ label, count }) => <div>{label} {count}</div>
+const StatisticLine = ({ text, value }) => <div>{text} {value}</div>
 
 const Statistics = ({ good, neutral, bad, all, average, percentage }) => {
   let result;
 
   if (all > 0) {
     result = (
-      <>
-        <Statistic label="good" count={good} />
-        <Statistic label="neutral" count={neutral} />
-        <Statistic label="bad" count={bad} />
-        <Statistic label="all" count={all} />
-        <Statistic label="average" count={average} />
-        <Statistic label="positive" count={percentage + " %"} />
-      </>
+      <div>
+        <StatisticLine text="good" value={good} />
+        <StatisticLine text="neutral" value={neutral} />
+        <StatisticLine text="bad" value={bad} />
+        <StatisticLine text="all" value={all} />
+        <StatisticLine text="average" value={average} />
+        <StatisticLine text="positive" value={percentage + " %"} />
+      </div>
     )
   } else {
     result = <div>No feedback given</div>
