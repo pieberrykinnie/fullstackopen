@@ -12,9 +12,38 @@ const App = () => {
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
 
-  const addGoodFeedback = () => setGood(good + 1)
-  const addNeutralFeedback = () => setNeutral(neutral + 1)
-  const addBadFeedback = () => setBad(bad + 1)
+  const [all, setAll] = useState(0)
+
+  const [average, setAverage] = useState(0)
+
+  const [percentage, setPercentage] = useState(0)
+
+  const addGoodFeedback = () => {
+    const newGood = good + 1
+    const newAll = all + 1
+    setGood(newGood)
+    setAll(newAll)
+    setAverage((newGood + bad * -1) / newAll)
+    setPercentage(newGood / newAll * 100)
+  }
+
+  const addNeutralFeedback = () => {
+    const newNeutral = neutral + 1
+    const newAll = all + 1
+    setNeutral(newNeutral)
+    setAll(newAll)
+    setAverage((good + bad * -1) / newAll)
+    setPercentage(good / newAll * 100)
+  }
+
+  const addBadFeedback = () => {
+    const newBad = bad + 1
+    const newAll = all + 1
+    setBad(newBad)
+    setAll(newAll)
+    setAverage((good + newBad * -1) / newAll)
+    setPercentage(good / newAll * 100)
+  }
 
   return (
     <div>
@@ -26,6 +55,9 @@ const App = () => {
       <Statistic label="good" count={good} />
       <Statistic label="neutral" count={neutral} />
       <Statistic label="bad" count={bad} />
+      <Statistic label="all" count={all} />
+      <Statistic label="average" count={average} />
+      <Statistic label="positive" count={percentage + " %"} />
     </div>
   )
 }
