@@ -6,6 +6,20 @@ const Button = ({ onClick, text }) => <button onClick={onClick}>{text}</button>
 
 const Statistic = ({ label, count }) => <div>{label} {count}</div>
 
+const Statistics = ({ good, neutral, bad, all, average, percentage }) => {
+  return (
+    <>
+      <Header text="statistics" />
+      <Statistic label="good" count={good} />
+      <Statistic label="neutral" count={neutral} />
+      <Statistic label="bad" count={bad} />
+      <Statistic label="all" count={all} />
+      <Statistic label="average" count={average} />
+      <Statistic label="positive" count={percentage + " %"} />
+    </>
+  )
+}
+
 const App = () => {
   // save clicks of each button to its own state
   const [good, setGood] = useState(0)
@@ -51,13 +65,7 @@ const App = () => {
       <Button onClick={addGoodFeedback} text="good" />
       <Button onClick={addNeutralFeedback} text="neutral" />
       <Button onClick={addBadFeedback} text="bad" />
-      <Header text="statistics" />
-      <Statistic label="good" count={good} />
-      <Statistic label="neutral" count={neutral} />
-      <Statistic label="bad" count={bad} />
-      <Statistic label="all" count={all} />
-      <Statistic label="average" count={average} />
-      <Statistic label="positive" count={percentage + " %"} />
+      <Statistics good={good} neutral={neutral} bad={bad} all={all} average={average} percentage={percentage} />
     </div>
   )
 }
