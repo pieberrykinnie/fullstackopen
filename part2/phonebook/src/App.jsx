@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+import phonebook from './services/phonebook'
 
 const Filter = ({ filter, handleOnChangeFilter }) => (
   <div>
@@ -50,10 +50,10 @@ const App = () => {
   const [filter, setFilter] = useState('')
 
   const hook = () => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        setPersons(response.data)
+    phonebook
+      .getAll()
+      .then(allPersons => {
+        setPersons(allPersons)
       })
   }
 
@@ -67,16 +67,13 @@ const App = () => {
   const addPersons = (event) => {
     event.preventDefault();
     if (!persons.find(person => person.name === newName)) {
-      axios
-        .post(
-          'http://localhost:3001/persons',
-          {
-            name: newName,
-            number: newNumber,
-            id: (persons.length + 1).toString()
-          }
-        ).then(response => {
-          setPersons(persons.concat(response.data));
+      phonebook
+        .add({
+          name: newName,
+          number: newNumber,
+          id: (persons.length + 1).toString()
+        }).then(newPerson => {
+          setPersons(persons.concat(newPerson));
           setNewName('');
           setNewNumber('');
         })
