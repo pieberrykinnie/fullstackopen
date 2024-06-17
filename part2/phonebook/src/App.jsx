@@ -66,12 +66,20 @@ const App = () => {
 
   const addPersons = (event) => {
     event.preventDefault();
-    if (persons.filter(person => person.name === newName).length == 0) {
-      setPersons(persons.concat(
-        { name: newName, number: newNumber, id: persons.length + 1 }
-      ));
-      setNewName('');
-      setNewNumber('');
+    if (!persons.find(person => person.name === newName)) {
+      axios
+        .post(
+          'http://localhost:3001/persons',
+          {
+            name: newName,
+            number: newNumber,
+            id: (persons.length + 1).toString()
+          }
+        ).then(response => {
+          setPersons(persons.concat(response.data));
+          setNewName('');
+          setNewNumber('');
+        })
     } else {
       alert(`${newName} is already added to phonebook`)
     }
