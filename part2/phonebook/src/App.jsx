@@ -32,14 +32,27 @@ const PersonForm = (props) => {
   )
 }
 
-const Person = ({ name, number }) => <div>{name} {number}</div>
+const DeleteButton = ({ toDelete, deletePerson }) => (
+  <button type='button' onClick={() => deletePerson(toDelete)}>{'delete'}</button>
+)
 
-const Persons = ({ persons, filter }) => (
+const Person = ({ person, deletePerson }) => (
+  <div>
+    {person.name} {person.number} {' '}
+    <DeleteButton toDelete={person.id} deletePerson={deletePerson} />
+  </div>
+)
+
+const Persons = ({ persons, filter, deletePerson }) => (
   <div>
     {persons.filter(person => person.name.toLowerCase().indexOf(filter) > -1)
-      .map(person =>
-        <Person key={person.id} name={person.name} number={person.number} />
-      )}
+      .map(person => (
+        <Person
+          key={person.id}
+          person={person}
+          deletePerson={deletePerson}
+        />
+      ))}
   </div>
 )
 
@@ -71,7 +84,6 @@ const App = () => {
         .add({
           name: newName,
           number: newNumber,
-          id: (persons.length + 1).toString()
         }).then(newPerson => {
           setPersons(persons.concat(newPerson));
           setNewName('');
@@ -79,6 +91,18 @@ const App = () => {
         })
     } else {
       alert(`${newName} is already added to phonebook`)
+    }
+  }
+
+  const deletePerson = (id) => {
+    const personToDelete = persons.find(person => person.id === id)
+
+    if (confirm(`Delete ${personToDelete.name} ?`)) {
+      phonebook
+        .deleteOne(personToDelete.id)
+        .then(deletedPerson => {
+          setPersons(persons.filter(person => person.id !== deletedPerson.id))
+        })
     }
   }
 
@@ -100,7 +124,7 @@ const App = () => {
 
       <h3>Numbers</h3>
 
-      <Persons persons={persons} filter={filter} />
+      <Persons persons={persons} filter={filter} deletePerson={deletePerson} />
     </div>
   )
 }

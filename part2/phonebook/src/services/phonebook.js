@@ -10,4 +10,8 @@ const add = (newEntry) => {
   return axios.post(URL, newEntry).then((response) => response.data);
 };
 
-export default { getAll, add };
+const deleteOne = (id) => {
+  return axios.delete(URL + `/${id}`).then((response) => response.data);
+};
+
+export default { getAll, add, deleteOne };
