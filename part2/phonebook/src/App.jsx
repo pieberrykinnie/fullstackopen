@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import phonebook from './services/phonebook'
+import './index.css'
 
 const Filter = ({ filter, handleOnChangeFilter }) => (
   <div>
@@ -56,11 +57,24 @@ const Persons = ({ persons, filter, deletePerson }) => (
   </div>
 )
 
+const Notification = ({ message }) => {
+  if (message === null) {
+    return null
+  }
+
+  return (
+    <div className='success'>
+      {message}
+    </div>
+  )
+}
+
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
+  const [successMessage, setSuccessMessage] = useState(null)
 
   const hook = () => {
     phonebook
@@ -89,6 +103,11 @@ const App = () => {
           setPersons(persons.concat(newPerson));
           setNewName('');
           setNewNumber('');
+
+          setSuccessMessage(`Added ${newPerson.name}`);
+          setTimeout(() => {
+            setSuccessMessage(null)
+          }, 5000);
         })
     } else {
       updatePerson({ ...personExists, number: newNumber })
@@ -122,6 +141,8 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+
+      <Notification message={successMessage} />
 
       <Filter filter={filter} handleOnChangeFilter={handleOnChangeFilter} />
 
