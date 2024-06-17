@@ -7,7 +7,13 @@ const Search = ({ search, handleSearch }) => (
   </div>
 )
 
-const Country = ({ name }) => <div>{name}</div>;
+const Country = ({ name, showDetails }) => (
+  <div>{name}<ShowDetailsButton name={name} showDetails={showDetails} /></div>
+);
+
+const ShowDetailsButton = ({ name, showDetails }) => (
+  <button onClick={() => { showDetails(name) }}>show</button>
+);
 
 const CountryDetailed = ({ country }) => {
   const languages = [];
@@ -31,7 +37,7 @@ const CountryDetailed = ({ country }) => {
   );
 }
 
-const Countries = ({ countries }) => {
+const Countries = ({ countries, showDetails }) => {
   let result = '';
 
   if (countries) {
@@ -39,7 +45,11 @@ const Countries = ({ countries }) => {
       result = 'Too many matches, specify another filter';
     else if (countries.length > 1) {
       result = countries.map(country => (
-        <Country key={country.name.common} name={country.name.common} />
+        <Country
+          key={country.name.common}
+          name={country.name.common}
+          showDetails={showDetails}
+        />
       ));
     } else
       result = <CountryDetailed country={countries[0]} />;
@@ -58,10 +68,14 @@ const App = () => {
     api.get(searchKey).then(countries => setCountries(countries));
   }
 
+  const showDetails = (name) => {
+    setCountries([countries.find(country => country.name.common === name)]);
+  }
+
   return (
     <div>
       <Search search={search} handleSearch={handleSearch} />
-      <Countries countries={countries} />
+      <Countries countries={countries} showDetails={showDetails} />
     </div>
   );
 }
