@@ -57,13 +57,13 @@ const Persons = ({ persons, filter, deletePerson }) => (
   </div>
 )
 
-const Notification = ({ message }) => {
+const Notification = ({ message, status }) => {
   if (message === null) {
     return null
   }
 
   return (
-    <div className='success'>
+    <div className={status}>
       {message}
     </div>
   )
@@ -75,6 +75,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
   const [successMessage, setSuccessMessage] = useState(null)
+  const [errorMessage, setErrorMessage] = useState(null)
 
   const hook = () => {
     phonebook
@@ -123,6 +124,12 @@ const App = () => {
           setNewName('')
           setNewNumber('')
         })
+        .catch(error => {
+          setErrorMessage(`Information of ${person.name} has already been removed from server`)
+          setTimeout(() => {
+            setErrorMessage(null);
+          }, 5000);
+        })
     }
   }
 
@@ -142,7 +149,8 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
 
-      <Notification message={successMessage} />
+      <Notification message={successMessage} status='success' />
+      <Notification message={errorMessage} status='error' />
 
       <Filter filter={filter} handleOnChangeFilter={handleOnChangeFilter} />
 
