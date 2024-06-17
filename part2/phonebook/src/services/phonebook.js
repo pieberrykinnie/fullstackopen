@@ -14,4 +14,10 @@ const deleteOne = (id) => {
   return axios.delete(URL + `/${id}`).then((response) => response.data);
 };
 
-export default { getAll, add, deleteOne };
+const update = (updatedEntry) => {
+  return axios
+    .put(URL + `/${updatedEntry.id}`, updatedEntry)
+    .then((response) => response.data);
+};
+
+export default { getAll, add, deleteOne, update };
